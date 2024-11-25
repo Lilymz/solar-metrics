@@ -1,0 +1,6 @@
+solar:
+  # 当前使用的是github.com/streadway/amqp库，具体用法可以看包文档
+  rabbitmq:
+    dsl:
+    queues:
+      - yangshuo-original-solar
