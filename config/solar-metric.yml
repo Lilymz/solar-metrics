@@ -1,6 +1,15 @@
 solar:
-  # 当前使用的是github.com/streadway/amqp库，具体用法可以看包文档
+  logrus:
+    format: text # 默认是text：以文本的形式输出,json：以json的格式输出
+    level: info
+    recordMethod: true #是否记录当前调用栈的方法名
+  # 当前使用的是github.com/rabbitmq/amqp091-go库，具体用法可以看包文档
   rabbitmq:
-    dsl:
-    queues:
-      - yangshuo-original-solar
+    dsl: amqp://admin:admin@localhost:5672
+    consumer:
+      name: solar-metrics-consumer
+      connection-nums: 2 # 当前程序启用几个连接处理mq消息
+      channel-nums: 2 #每一个连接维护的channel数
+      qos: 10
+      queues: # 待消费队列
+        - yangsuo-test3
