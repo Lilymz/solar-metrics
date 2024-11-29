@@ -11,12 +11,12 @@ pipeline {
            steps{
                 script{
                     // 清理存在的镜像，
-                    sh ```
+                    sh '''
                         docker rmi "${APP_NAME}"
                         docker rm -f "${appName}"
                         docker image prune -f
                         docker network prune -f
-                    ``
+                    '''
                 }
            }
         }
@@ -38,11 +38,11 @@ pipeline {
         stage("Build"){
             steps{
                 script{
-                    sh ```
+                    sh '''
                         go mod tidy
                         sleep 3
                         go build -o "${APP_NAME}" internal/.
-                    ```
+                    '''
                 }
             }
         }
@@ -57,9 +57,9 @@ pipeline {
         stage("Deploy"){
             steps{
                 script{
-                    sh ```
+                    sh '''
                         docker compose up -d
-                    ```
+                    '''
                 }
             }
         }
