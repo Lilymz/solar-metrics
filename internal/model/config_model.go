@@ -8,8 +8,7 @@ import (
 var (
 	pwdPath, _ = os.Getwd()
 	config     *Config
-	// todo 待调整
-	path = "/Users/zhangjay/go/solar-metrics/config/solar-metric.yml"
+	path       = pwdPath + "/config/solar-metric.yml"
 )
 
 type Config struct {
