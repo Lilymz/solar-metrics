@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	addr = flag.String("address", "127.0.0.1:9999", "The address to listen on for HTTP requests.")
+	addr = flag.String("address", "0.0.0.0:9999", "The address to listen on for HTTP requests.")
 )
 
 func init() {
