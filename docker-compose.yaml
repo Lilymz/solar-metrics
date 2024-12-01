@@ -5,5 +5,5 @@ services:
     image: solar-metrics:V1.0.0
     cpu_count: 1
     ports:
-      - "6060:8080"
+      - "9999:9999"
     entrypoint: ["./solar-metrics"]
