@@ -38,8 +38,6 @@ func init() {
 	}
 	log.SetLevel(level)
 	log.Info("solar-metrics完成日志配置初始化!")
-	// todo rabbitmq初始化
-
 }
 func main() {
 	flag.Parse()

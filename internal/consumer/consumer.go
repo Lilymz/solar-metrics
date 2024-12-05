@@ -1,45 +1,37 @@
 package consumer
 
 import (
-	"github.com/rabbitmq/amqp091-go"
 	log "github.com/sirupsen/logrus"
-	"solar-metrics/internal/metric"
 	"solar-metrics/internal/model"
 	"solar-metrics/internal/mq"
 )
 
-// Start 开启消费
+var consumer mq.Consumer
+
 func Start() {
 	doStart()
 }
-
-// Stop 结束消费
 func Stop() {
-	// todo 未确认数据回写mq,且不在生产任务
+	defer func(consumer mq.Consumer) {
+		err := consumer.Close()
+		if err != nil {
+			log.Error(err)
+		}
+	}(consumer)
 }
-
 func doStart() {
-	// 创建连接
-	url := model.GetConfig().Solar.Rabbitmq.Dsl
+	dsl := model.GetConfig().Solar.Rabbitmq.Dsl
+	consumer = mq.NewConsumer(dsl)
 	for _, queue := range model.GetConfig().Solar.Rabbitmq.Consumer.Queues {
-		deliveries, err := mq.Delivery(url, queue)
+		deliveries, err := consumer.Delivery(dsl, queue)
 		if err != nil {
 			log.WithFields(log.Fields{
 				"queue": queue,
 				"error": err,
-			}).Error("创建mq的消费者出现错误")
+			}).Error("creat mq consumer error")
 		}
 		for _, delivery := range deliveries {
-			go handler(delivery)
+			go consumer.Consumer(delivery)
 		}
-	}
-}
-func handler(delivery <-chan amqp091.Delivery) {
-	metrics := metric.GetMetrics()
-	for message := range delivery {
-		power := mq.GetMessage(message)
-		metrics.IncSolarTotalPower(power)
-		// 消息确认
-		_ = message.Ack(false)
 	}
 }
